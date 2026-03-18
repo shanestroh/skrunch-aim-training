@@ -7,11 +7,15 @@ const hitsEl = document.getElementById("hits");
 const shotsEl = document.getElementById("shots");
 const menuEl = document.getElementById("menu");
 const startBtn = document.getElementById("start-btn");
+const timeEl = document.getElementById("time");
 
 let score = 0;
 let hits = 0;
 let shots = 0;
 let isPointerLocked = false;
+let gameRunning = false;
+let timeLeft = 30;
+let timerInterval = null;
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x0b0f14);
@@ -68,6 +72,7 @@ function updateHud() {
   scoreEl.textContent = String(score);
   hitsEl.textContent = String(hits);
   shotsEl.textContent = String(shots);
+  timeEl.textContent = String(timeLeft);
 }
 
 const raycaster = new THREE.Raycaster();
@@ -78,7 +83,7 @@ const mouseLook = {
 };
 
 function shoot() {
-  if (!isPointerLocked) return;
+  if (!isPointerLocked || !gameRunning) return;
 
   shots += 1;
 
@@ -107,6 +112,7 @@ document.addEventListener("pointerlockchange", () => {
 
 startBtn.addEventListener("click", async () => {
   await renderer.domElement.requestPointerLock();
+  startGame();
 });
 
 document.addEventListener("mousemove", (event) => {
@@ -136,3 +142,34 @@ function animate() {
 
 updateHud();
 animate();
+
+function startGame() {
+  score = 0;
+  hits = 0;
+  shots = 0;
+  timeLeft = 30;
+
+  gameRunning = true;
+
+  updateHud();
+  moveTarget();
+
+  timerInterval = setInterval(() => {
+    timeLeft--;
+
+    updateHud();
+
+    if (timeLeft <= 0) {
+      endGame();
+    }
+  }, 1000);
+}
+
+function endGame() {
+  gameRunning = false;
+  clearInterval(timerInterval);
+
+  document.exitPointerLock();
+
+  alert(`Game Over!\nScore: ${score}`);
+}

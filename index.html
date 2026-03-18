@@ -11,6 +11,7 @@
         <div>Score: <span id="score">0</span></div>
         <div>Hits: <span id="hits">0</span></div>
         <div>Shots: <span id="shots">0</span></div>
+        <div>Time: <span id="time">30</span></div>
       </div>
 
       <div id="crosshair"></div>
@@ -18,10 +19,14 @@
       <div id="menu">
         <div id="menu-card">
           <h1>Skrunch Aim Training</h1>
-          <p>
-            First-person aim trainer prototype.<br />
-            Click start, move your mouse to aim, and left click to shoot.
-          </p>
+
+          <p>Adjust your settings</p>
+
+          <label>Sensitivity:</label><br />
+          <input id="sens-input" type="number" step="0.1" value="2.5" />
+
+          <br /><br />
+
           <button id="start-btn">Start</button>
         </div>
       </div>
